@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import Navbar from "./Navbar.jsx";
 import "./App.css";
 
@@ -7,6 +6,7 @@ function App() {
   const [allItems, setAllItems] = useState([]);
   const [selectedUser, setSelectedUser] = useState("all");
   const [selectedItem, setSelectedItem] = useState(null);
+  const [newItem, setNewItem] = useState("");
 
   // Fetch list of items from API
   useEffect(() => {
@@ -22,7 +22,6 @@ function App() {
 
   //Filter Items by Users
   const userIds = [...new Set(allItems.map((item) => item.UserId))];
-
   const filteredItems = allItems.filter((item) => {
     return selectedUser === "all" || item.UserId === Number(selectedUser);
   });
@@ -35,6 +34,24 @@ function App() {
       return description;
     }
   }
+
+  //create a new item
+
+  const createItem = () => {
+    fetch("http://localhost:8080/item", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newItem),
+    })
+      .then((res) => res.json())
+      .then((createdItem) => {
+        setAllItems([...allItems, createdItem[0]]);
+        setNewItem({ name: "", description: "", UserId: 1 });
+      })
+      .catch((err) => console.error("Error creating item:", err));
+  };
 
   return (
     <>
@@ -92,28 +109,36 @@ function App() {
       <section id="spacer"></section>
 
       {selectedItem && (
-        <div className="selected-item">
+        <div>
           <h2>Item Details</h2>
 
-          <p>
-            <strong>ID:</strong> {selectedItem.id}
-          </p>
-          <p>
-            <strong>User ID:</strong> {selectedItem.UserId}
-          </p>
-          <p>
-            <strong>Item Name:</strong> {selectedItem.item_name}
-          </p>
-          <p>
-            <strong>Description:</strong> {selectedItem.description}
-          </p>
-          <p>
-            <strong>Quantity:</strong> {selectedItem.quantity}
-          </p>
-
+          <p>ID: {selectedItem.id}</p>
+          <p>User ID: {selectedItem.UserId}</p>
+          <p>Item Name: {selectedItem.item_name}</p>
+          <p>Description: {selectedItem.description}</p>
+          <p>Quantity: {selectedItem.quantity}</p>
           <button onClick={() => setSelectedItem(null)}>Close</button>
         </div>
       )}
+
+      <form onSubmit={createItem}>
+        <input
+          type="text"
+          placeholder="Item Name"
+          value={newItem.name}
+          onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Description"
+          value={newItem.description}
+          onChange={(e) =>
+            setNewItem({ ...newItem, description: e.target.value })
+          }
+        />
+        <button type="submit">Add Item</button>
+      </form>
     </>
   );
 }
