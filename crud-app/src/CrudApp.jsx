@@ -45,7 +45,7 @@ function MainPage({ currentUser }) {
     }
   }
 
-  //create a new item
+  //create a new item - fix the api backend
 
   const createItem = () => {
     fetch("http://localhost:8080/item", {
@@ -62,6 +62,14 @@ function MainPage({ currentUser }) {
       })
       .catch((err) => console.error("Error creating item:", err));
   };
+
+  // Show list of items added by user
+
+  // Edit an item - In edit mode, page remains the same and the fields become editable.
+
+  // Delete an item
+
+  //Click an item - see card for specific item
 
   return (
     <>
