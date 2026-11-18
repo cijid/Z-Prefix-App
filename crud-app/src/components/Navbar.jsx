@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "./Navbar.css";
+import "../styles/Navbar.css";
 
 const Navbar = ({ currentUser, setCurrentUser }) => {
   return (
@@ -15,6 +15,7 @@ const Navbar = ({ currentUser, setCurrentUser }) => {
               {" "}
               <button onClick={() => setCurrentUser(null)}>Logout</button>
             </li>
+            <Link to="/additem">Add Item</Link>
           </>
         ) : (
           <li>

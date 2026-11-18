@@ -33,11 +33,11 @@ app.get("/user", (req, res) => {
 app.post("/item", async (req, res) => {
   try {
     const [newItem] = await knex("item").insert(req.body).returning("*");
-    res.status(201).json(report);
+    res.status(201).json(newItem);
   } catch (err) {
     console.error(err);
     res.status(500).json({
-      error: "Could not create report",
+      error: "Could not create item",
     });
   }
 });

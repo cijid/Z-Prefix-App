@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "./App.css";
+import "../styles/App.css";
 
 function MainPage({ currentUser }) {
   const [allItems, setAllItems] = useState([]);
@@ -7,7 +7,6 @@ function MainPage({ currentUser }) {
     currentUser ? String(currentUser.id) : "all",
   );
   const [selectedItem, setSelectedItem] = useState(null);
-  const [newItem, setNewItem] = useState("");
 
   //After login, default to current user's items
   useEffect(() => {
@@ -31,7 +30,16 @@ function MainPage({ currentUser }) {
   }, []);
 
   //Filter Items by Users
-  const userIds = [...new Set(allItems.map((item) => item.UserId))];
+  const userIds = [];
+
+  for (let i = 0; i < allItems.length; i++) {
+    const userId = allItems[i].UserId;
+
+    if (!userIds.includes(userId)) {
+      userIds.push(userId);
+    }
+  }
+
   const filteredItems = allItems.filter((item) => {
     return selectedUser === "all" || item.UserId === Number(selectedUser);
   });
@@ -44,24 +52,6 @@ function MainPage({ currentUser }) {
       return description;
     }
   }
-
-  //create a new item - fix the api backend
-
-  const createItem = () => {
-    fetch("http://localhost:8080/item", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newItem),
-    })
-      .then((res) => res.json())
-      .then((createdItem) => {
-        setAllItems([...allItems, createdItem[0]]);
-        setNewItem({ name: "", description: "", UserId: 1 });
-      })
-      .catch((err) => console.error("Error creating item:", err));
-  };
 
   // Show list of items added by user
 
@@ -109,6 +99,8 @@ function MainPage({ currentUser }) {
             <th>Item Name</th>
             <th>Description</th>
             <th>Quantity</th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody className="item-table-body">
@@ -140,30 +132,6 @@ function MainPage({ currentUser }) {
           <button onClick={() => setSelectedItem(null)}>Close</button>
         </div>
       )}
-
-      <form onSubmit={createItem}>
-        <input
-          type="text"
-          placeholder="Item Name"
-          value={newItem.name}
-          onChange={(makeNewItem) =>
-            setNewItem({ ...newItem, name: makeNewItem.target.value })
-          }
-          required
-        />
-        <input
-          type="text"
-          placeholder="Description"
-          value={newItem.description}
-          onChange={(newItemDescription) =>
-            setNewItem({
-              ...newItem,
-              description: newItemDescription.target.value,
-            })
-          }
-        />
-        <button type="submit">Add Item</button>
-      </form>
     </>
   );
 }

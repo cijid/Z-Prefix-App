@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import "./LoginCreateAccount.css";
+import "../styles/LoginCreateAccount.css";
 
 const LoginCreateAccount = ({ setCurrentUser }) => {
   const [userSelection, setUserSelection] = useState("Create Account");
