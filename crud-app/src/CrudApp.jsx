@@ -1,12 +1,22 @@
 import { useState, useEffect } from "react";
-import Navbar from "./Navbar.jsx";
 import "./App.css";
 
-function MainPage() {
+function MainPage({ currentUser }) {
   const [allItems, setAllItems] = useState([]);
-  const [selectedUser, setSelectedUser] = useState("all");
+  const [selectedUser, setSelectedUser] = useState(
+    currentUser ? String(currentUser.id) : "all",
+  );
   const [selectedItem, setSelectedItem] = useState(null);
   const [newItem, setNewItem] = useState("");
+
+  //After login, default to current user's items
+  useEffect(() => {
+    if (currentUser) {
+      setSelectedUser(String(currentUser.id));
+    } else {
+      setSelectedUser("all");
+    }
+  }, [currentUser]);
 
   // Fetch list of items from API
   useEffect(() => {
@@ -65,13 +75,17 @@ function MainPage() {
             <select
               id="user-filter"
               value={selectedUser}
-              onChange={(e) => setSelectedUser(e.target.value)}
+              onChange={(userFilter) =>
+                setSelectedUser(userFilter.target.value)
+              }
             >
               <option value="all">All Users</option>
 
               {userIds.map((userId) => (
                 <option key={userId} value={userId}>
-                  User {userId}
+                  {currentUser && userId === currentUser.id
+                    ? `User ${userId} (${currentUser.First_Name} - You)`
+                    : `User ${userId}`}
                 </option>
               ))}
             </select>
@@ -124,15 +138,20 @@ function MainPage() {
           type="text"
           placeholder="Item Name"
           value={newItem.name}
-          onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+          onChange={(makeNewItem) =>
+            setNewItem({ ...newItem, name: makeNewItem.target.value })
+          }
           required
         />
         <input
           type="text"
           placeholder="Description"
           value={newItem.description}
-          onChange={(e) =>
-            setNewItem({ ...newItem, description: e.target.value })
+          onChange={(newItemDescription) =>
+            setNewItem({
+              ...newItem,
+              description: newItemDescription.target.value,
+            })
           }
         />
         <button type="submit">Add Item</button>

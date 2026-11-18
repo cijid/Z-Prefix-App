@@ -42,6 +42,32 @@ app.post("/item", async (req, res) => {
   }
 });
 
+app.post("/user", async (req, res) => {
+  const { First_Name, Last_Name, Username, Password } = req.body;
+
+  if (!First_Name || !Last_Name || !Username || !Password) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
+  try {
+    const [newUser] = await knex("user")
+      .insert({
+        First_Name,
+        Last_Name,
+        Username,
+        Password,
+      })
+      .returning("*");
+
+    res.status(201).json(newUser);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      error: "Could not create user",
+    });
+  }
+});
+
 app.listen(port, () =>
   console.log(`This app is listening at http://localhost:${port}`),
 );
