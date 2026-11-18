@@ -1,0 +1,75 @@
+.account-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 150px;
+  background: white;
+  padding-bottom: 30px;
+}
+
+.account-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.account-header {
+  color: black;
+  font-size: 48px;
+  font-weight: 700px;
+}
+
+.linebreak {
+  width: 250px;
+  height: 6px;
+  background: darkblue;
+  border-radius: 9px;
+}
+
+.account-inputs {
+  margin-top: 55px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.account-inputs input {
+  height: 50 px;
+  width: 300px;
+  background: transparent;
+  color: gray;
+  font-size: 20px;
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  width: 480px;
+  height: 80px;
+  background: white;
+}
+
+.submit-container {
+  display: flex;
+  gap: 30px;
+  margin: 60px auto;
+}
+
+.submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 220 px;
+  height: 59px;
+  color: white;
+  background: darkblue;
+  border-radius: 15px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}

@@ -1,19 +1,26 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import "./Navbar.css";
 
-const Navbar = () => {
+const Navbar = ({ currentUser, setCurrentUser }) => {
   return (
     <nav className="navbar">
-      <a href="/" className="crudapp">
+      <Link to="/" className="crudapp">
         Crud App
-      </a>
+      </Link>
       <ul className="nav-links">
-        <li>
-          <a href="/login">Login</a>
-        </li>
-        <li>
-          <a href="/create-account">Create Account</a>
-        </li>
+        {currentUser ? (
+          <>
+            <li>Logged in as {currentUser.First_Name}</li>
+            <li>
+              {" "}
+              <button onClick={() => setCurrentUser(null)}>Logout</button>
+            </li>
+          </>
+        ) : (
+          <li>
+            <Link to="/account">Create Account or Login</Link>
+          </li>
+        )}
       </ul>
     </nav>
   );
