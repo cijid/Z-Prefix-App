@@ -53,17 +53,82 @@ function MainPage({ currentUser }) {
     }
   }
 
+  // Add Item
+  // Moved to component AddItem.jsx
+
   // Show list of items added by user
 
   // Edit an item - In edit mode, page remains the same and the fields become editable.
+  const [editMode, setEditMode] = useState(false);
+  const [editItem, setEditItem] = useState({
+    item_name: "",
+    description: "",
+    quantity: 0,
+  });
+
+  const startEditMode = () => {
+    //Stop being dumb and crashing
+    if (selectedItem === null) {
+      return;
+    }
+
+    setEditItem({
+      item_name: selectedItem.item_name,
+      description: selectedItem.description,
+      quantity: selectedItem.quantity,
+    });
+    setEditMode(true);
+  };
+
+  const updateEditedItem = async (itemEdits) => {
+    itemEdits.preventDefault();
+
+    const updatedFields = {
+      item_name: editItem.item_name,
+      description: editItem.description,
+      quantity: Number(editItem.quantity),
+    };
+
+    fetch(`http://localhost:8080/item/${selectedItem.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedFields),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        let updatedItem;
+
+        if (Array.isArray(data)) {
+          updatedItem = data[0];
+        } else if (data && data.id) {
+          updatedItem = data;
+        } else {
+          updatedItem = { ...selectedItem, ...updatedFields };
+        }
+        setAllItems((prevItems) =>
+          prevItems.map((item) =>
+            item.id === selectedItem.id ? updatedItem : item,
+          ),
+        );
+
+        setSelectedItem(updatedItem);
+
+        setEditMode(false);
+      });
+  };
 
   // Delete an item
 
   //Click an item - see card for specific item
 
+  const isOwner =
+    currentUser && selectedItem && currentUser.id === selectedItem.UserId;
+
   return (
     <>
-      <section id="filter-by-item">
+      <section className="filter-by-item">
         <div>
           <h2>Filter by User</h2>
 
@@ -123,13 +188,62 @@ function MainPage({ currentUser }) {
       {selectedItem && (
         <div>
           <h2>Item Details</h2>
+          {editMode ? (
+            <form onSubmit={updateEditedItem}>
+              <div>
+                <label>Item Name: </label>
+                <input
+                  type="text"
+                  value={editItem.item_name}
+                  onChange={(e) =>
+                    setEditItem({ ...editItem, item_name: e.target.value })
+                  }
+                  required
+                />
+              </div>
 
-          <p>ID: {selectedItem.id}</p>
-          <p>User ID: {selectedItem.UserId}</p>
-          <p>Item Name: {selectedItem.item_name}</p>
-          <p>Description: {selectedItem.description}</p>
-          <p>Quantity: {selectedItem.quantity}</p>
-          <button onClick={() => setSelectedItem(null)}>Close</button>
+              <div>
+                <label>Description: </label>
+                <textarea
+                  value={editItem.description}
+                  onChange={(e) =>
+                    setEditItem({ ...editItem, description: e.target.value })
+                  }
+                  required
+                />
+              </div>
+
+              <div>
+                <label>Quantity: </label>
+                <input
+                  type="number"
+                  value={editItem.quantity}
+                  onChange={(e) =>
+                    setEditItem({ ...editItem, quantity: e.target.value })
+                  }
+                  required
+                />
+              </div>
+
+              <button type="submit">Save Changes</button>
+              <button type="button" onClick={() => setEditMode(false)}>
+                Cancel
+              </button>
+            </form>
+          ) : (
+            <div>
+              <p>ID: {selectedItem.id}</p>
+              <p>User ID: {selectedItem.UserId}</p>
+              <p>Item Name: {selectedItem.item_name}</p>
+              <p>Description: {selectedItem.description}</p>
+              <p>Quantity: {selectedItem.quantity}</p>
+
+              {/* Only show the Edit button if the logged-in user created this item */}
+              {isOwner && <button onClick={startEditMode}>Edit Item</button>}
+
+              <button onClick={() => setSelectedItem(null)}>Close</button>
+            </div>
+          )}
         </div>
       )}
     </>

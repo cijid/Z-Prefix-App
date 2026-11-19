@@ -30,17 +30,23 @@ const LoginCreateAccount = ({ setCurrentUser }) => {
       setCurrentUser(createdUser);
       navigate("/");
     } else {
-      // Fetch users and verify matching Username and Password
-      const response = await fetch("http://localhost:8080/user");
+      const response = await fetch("http://localhost:8080/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Username: username,
+          Password: password,
+        }),
+      });
 
-      const users = await response.json();
-      const matchedUser = users.find(
-        (userCreds) =>
-          userCreds.Username === username && userCreds.Password === password,
-      );
+      if (response.ok) {
+        const matchedUser = await response.json();
 
-      setCurrentUser(matchedUser);
-      navigate("/");
+        setCurrentUser(matchedUser);
+        navigate("/");
+      }
     }
   };
 

@@ -5,6 +5,7 @@ const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 const knex = require("knex")(require("./knexfile.js")["development"]);
+const bcrypt = require("bcrypt");
 
 app.get("/", (req, res) => {
   res.status(200).json("Hello from root route!");
@@ -30,6 +31,7 @@ app.get("/user", (req, res) => {
 
 //Post
 
+// Add Item
 app.post("/item", async (req, res) => {
   try {
     const [newItem] = await knex("item").insert(req.body).returning("*");
@@ -42,20 +44,18 @@ app.post("/item", async (req, res) => {
   }
 });
 
+// Create User
 app.post("/user", async (req, res) => {
-  const { First_Name, Last_Name, Username, Password } = req.body;
-
-  if (!First_Name || !Last_Name || !Username || !Password) {
-    return res.status(400).json({ error: "All fields are required" });
-  }
-
   try {
+    const { First_Name, Last_Name, Username, Password } = req.body;
+    const hashedpassword = await bcrypt.hash(Password, 10);
+
     const [newUser] = await knex("user")
       .insert({
-        First_Name,
-        Last_Name,
-        Username,
-        Password,
+        First_Name: First_Name,
+        Last_Name: Last_Name,
+        Username: Username,
+        Password: hashedpassword,
       })
       .returning("*");
 
@@ -66,6 +66,37 @@ app.post("/user", async (req, res) => {
       error: "Could not create user",
     });
   }
+});
+
+// Login with encrypted password.
+app.post("/login", async (req, res) => {
+  const { Username, Password } = req.body;
+
+  const user = await knex("user").where({ Username: Username }).first();
+
+  const passwordMatch = await bcrypt.compare(Password, user.Password);
+
+  res.status(200).json({
+    id: user.id,
+    First_Name: user.First_Name,
+    Last_Name: user.Last_Name,
+    Username: user.Username,
+  });
+});
+
+//Patch
+app.patch("/item/:id", (req, res) => {
+  knex("item")
+    .where("id", req.params.id)
+    .update(req.body)
+    .returning("*")
+    .then((data) => {
+      if (data.length === 0) {
+        return res.status(404).json({ error: "Item not found" });
+      }
+
+      res.json(data);
+    });
 });
 
 app.listen(port, () =>

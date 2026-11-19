@@ -2,6 +2,11 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
+
+const bcrypt = require("bcrypt");
+
+const saltRounds = 10;
+
 exports.seed = async function (knex) {
   // Deletes ALL existing entries
   await knex("user").del();
@@ -12,19 +17,19 @@ exports.seed = async function (knex) {
       First_Name: "John",
       Last_Name: "Doe",
       Username: "johndoe",
-      Password: "password123",
+      Password: await bcrypt.hash("password123", saltRounds),
     },
     {
       First_Name: "Jane",
       Last_Name: "Smith",
       Username: "janesmith",
-      Password: "password456",
+      Password: await bcrypt.hash("password456", saltRounds),
     },
     {
       First_Name: "Mike",
       Last_Name: "Johnson",
       Username: "mikejohnson",
-      Password: "password789",
+      Password: await bcrypt.hash("password789", saltRounds),
     },
   ]);
 };
