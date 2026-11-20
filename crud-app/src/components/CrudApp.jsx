@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "../styles/App.css";
 
-function MainPage({ currentUser }) {
+function CrudApp({ currentUser }) {
   const [allItems, setAllItems] = useState([]);
   const [selectedUser, setSelectedUser] = useState(
     currentUser ? String(currentUser.id) : "all",
@@ -57,6 +57,7 @@ function MainPage({ currentUser }) {
   // Moved to component AddItem.jsx
 
   // Show list of items added by user
+  // Filterable with dropdown
 
   // Edit an item - In edit mode, page remains the same and the fields become editable.
   const [editMode, setEditMode] = useState(false);
@@ -79,6 +80,31 @@ function MainPage({ currentUser }) {
     });
     setEditMode(true);
   };
+
+  async function deleteItem() {
+    if (selectedItem === null) {
+      console.log("No item selected");
+      return;
+    }
+
+    const response = await fetch(
+      `http://localhost:8080/item/${selectedItem.id}`,
+      {
+        method: "DELETE",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Could not delete item");
+    }
+
+    setAllItems((prevItems) =>
+      prevItems.filter((item) => item.id !== selectedItem.id),
+    );
+
+    setSelectedItem(null);
+    setEditMode(false);
+  }
 
   const updateEditedItem = async (itemEdits) => {
     itemEdits.preventDefault();
@@ -126,10 +152,14 @@ function MainPage({ currentUser }) {
   const isOwner =
     currentUser && selectedItem && currentUser.id === selectedItem.UserId;
 
+  console.log("Current User:", currentUser);
+  console.log("Selected Item:", selectedItem);
+  console.log("Edit Mode:", editMode);
+
   return (
     <>
       <section className="filter-by-item">
-        <div>
+        <div className="filter-by-item-container">
           <h2>Filter by User</h2>
 
           <div>
@@ -159,13 +189,11 @@ function MainPage({ currentUser }) {
       <table className="item-table">
         <thead className="item-table-head">
           <tr>
-            <th>ID</th>
-            <th>User Id</th>
+            <th>Item ID</th>
+            <th>User ID</th>
             <th>Item Name</th>
             <th>Description</th>
             <th>Quantity</th>
-            <th></th>
-            <th></th>
           </tr>
         </thead>
         <tbody className="item-table-body">
@@ -181,12 +209,10 @@ function MainPage({ currentUser }) {
         </tbody>
       </table>
 
-      <div className="ticks"></div>
-
       <section id="spacer"></section>
 
       {selectedItem && (
-        <div>
+        <div className="item-details">
           <h2>Item Details</h2>
           {editMode ? (
             <form onSubmit={updateEditedItem}>
@@ -226,8 +252,19 @@ function MainPage({ currentUser }) {
               </div>
 
               <button type="submit">Save Changes</button>
-              <button type="button" onClick={() => setEditMode(false)}>
+              <button
+                type="button"
+                className="cancel-button"
+                onClick={() => setEditMode(false)}
+              >
                 Cancel
+              </button>
+              <button
+                type="button"
+                className="delete-button"
+                onClick={deleteItem}
+              >
+                Delete
               </button>
             </form>
           ) : (
@@ -238,8 +275,9 @@ function MainPage({ currentUser }) {
               <p>Description: {selectedItem.description}</p>
               <p>Quantity: {selectedItem.quantity}</p>
 
-              {/* Only show the Edit button if the logged-in user created this item */}
-              {isOwner && <button onClick={startEditMode}>Edit Item</button>}
+              {isOwner && (
+                <button onClick={startEditMode}>Edit or Delete Item</button>
+              )}
 
               <button onClick={() => setSelectedItem(null)}>Close</button>
             </div>
@@ -250,4 +288,4 @@ function MainPage({ currentUser }) {
   );
 }
 
-export default MainPage;
+export default CrudApp;

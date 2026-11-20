@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../styles/AddItem.css";
 
 const AddItem = ({ currentUser }) => {
   const [newItem, setNewItem] = useState({
@@ -30,49 +31,62 @@ const AddItem = ({ currentUser }) => {
 
   return (
     <>
-      <div className="add-item-container">
-        <form onSubmit={createItem}>
-          <div>
-            <input
-              type="text"
-              placeholder="Item Name"
-              value={newItem.name}
-              onChange={(makeNewItem) =>
-                setNewItem({ ...newItem, item_name: makeNewItem.target.value })
-              }
-              required
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              placeholder="Description"
-              value={newItem.description}
-              onChange={(makeNewItem) =>
-                setNewItem({
-                  ...newItem,
-                  description: makeNewItem.target.value,
-                })
-              }
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              placeholder="Quantity"
-              value={newItem.quantity}
-              onChange={(makeNewItem) =>
-                setNewItem({
-                  ...newItem,
-                  quantity: makeNewItem.target.value,
-                })
-              }
-            />
-          </div>
-          <div>
-            <button type="submit">Add Item</button>
-          </div>
-        </form>
+      <div className="add-item-header">
+        <h1>Add Item</h1>
+        <div className="add-item-container">
+          <form onSubmit={createItem}>
+            <div className="add-item-inputs">
+              <input
+                type="text"
+                placeholder="Item Name"
+                value={newItem.name}
+                onChange={(makeNewItem) =>
+                  setNewItem({
+                    ...newItem,
+                    item_name: makeNewItem.target.value,
+                  })
+                }
+                required
+              />
+            </div>
+            <div className="add-item-inputs">
+              <input
+                type="text"
+                placeholder="Description"
+                value={newItem.description}
+                onChange={(makeNewItem) =>
+                  setNewItem({
+                    ...newItem,
+                    description: makeNewItem.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="add-item-inputs">
+              <input
+                type="text"
+                placeholder="Quantity"
+                value={newItem.quantity}
+                onChange={(makeNewItem) =>
+                  setNewItem({
+                    ...newItem,
+                    quantity: makeNewItem.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="add-item-button-container">
+              <div className="add-item-button">
+                <button type="submit">Submit</button>
+              </div>
+              <div className="add-item-button">
+                <button type="submit" onClick={() => navigate("/")}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </>
   );

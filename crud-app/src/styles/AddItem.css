@@ -1,5 +1,46 @@
+.add-item-header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 150px;
+
+  padding-bottom: 30px;
+}
 .add-item-container {
   display: flex;
+  align-items: center;
   flex-direction: column;
-  gap: 12px;
+  border-radius: 15px;
+  background: white;
+  padding-bottom: 30px;
+}
+
+.add-item-inputs input {
+  margin-top: 30px;
+  height: 60 px;
+  width: 350px;
+  background: transparent;
+  color: gray;
+  font-size: 20px;
+}
+
+.add-item-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 30px;
+}
+
+.add-item-button button {
+  display: flex;
+  align-items: center;
+  width: 220 px;
+  height: 59px;
+  color: white;
+  background: darkblue;
+  border-radius: 15px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
 }

@@ -15,7 +15,9 @@ const Navbar = ({ currentUser, setCurrentUser }) => {
               {" "}
               <button onClick={() => setCurrentUser(null)}>Logout</button>
             </li>
-            <Link to="/additem">Add Item</Link>
+            <Link to="/additem" className="add-item-link">
+              Add Item
+            </Link>
           </>
         ) : (
           <li>

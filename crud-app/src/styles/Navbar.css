@@ -7,7 +7,7 @@
   padding: 1rem 2rem;
 }
 
-.site-title {
+.crudapp {
   font-size: 1.5rem;
   font-weight: bold;
   color: rgb(255, 255, 255);
@@ -29,4 +29,22 @@
 
 .nav-links a:hover {
   text-decoration: underline;
+}
+
+.add-item-link {
+  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+
+  border: 5px solid rgb(255, 123, 0);
+  border-radius: 5px;
+  padding: 10px 15px;
+
+  transition: background-color 0.2s ease;
+}
+
+.add-item-link:hover {
+  background-color: rgba(255, 255, 255, 0.15);
 }

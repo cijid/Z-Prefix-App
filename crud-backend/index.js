@@ -99,6 +99,14 @@ app.patch("/item/:id", (req, res) => {
     });
 });
 
+// DELETE
+// Less GTA6 more Deleting things
+
+app.delete("/item/:id", async (req, res) => {
+  await knex("item").where("id", req.params.id).del();
+  res.status(200).json({ message: "Item deleted" });
+});
+
 app.listen(port, () =>
   console.log(`This app is listening at http://localhost:${port}`),
 );
