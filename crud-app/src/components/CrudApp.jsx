@@ -142,10 +142,6 @@ function CrudApp({ currentUser }) {
       });
   };
 
-  // Delete an item
-
-  //Click an item - see card for specific item
-
   const isOwner =
     currentUser && selectedItem && currentUser.id === selectedItem.UserId;
 
