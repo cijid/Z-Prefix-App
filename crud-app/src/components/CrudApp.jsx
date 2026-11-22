@@ -128,11 +128,8 @@ function CrudApp({ currentUser }) {
 
         if (Array.isArray(data)) {
           updatedItem = data[0];
-        } else if (data && data.id) {
-          updatedItem = data;
-        } else {
-          updatedItem = { ...selectedItem, ...updatedFields };
         }
+
         setAllItems((prevItems) =>
           prevItems.map((item) =>
             item.id === selectedItem.id ? updatedItem : item,
