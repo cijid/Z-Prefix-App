@@ -36,5 +36,5 @@ jobs:
       # Runs a set of commands using the runners shell
       - uses: actions/upload-pages-artifact@v4
         with:
-          path: ./dist
+          path: ./crud-app/dist
       - uses: actions/deploy-pages@v4
