@@ -28,7 +28,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: node-version:latest
+        with: node-version:24
 
       # Runs a single command using the runners shell
       - run: npm ci
