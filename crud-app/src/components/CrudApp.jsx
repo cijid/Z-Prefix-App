@@ -124,7 +124,7 @@ function CrudApp({ currentUser }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        let updatedItem;
+        var updatedItem = [];
 
         if (Array.isArray(data)) {
           updatedItem = data[0];
