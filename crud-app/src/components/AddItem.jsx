@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/AddItem.css";
-const RENDER_API_URL = import.meta.env.API_URL;
+const RENDER_API_URL = import.meta.env.VITE_API_URL;
 
 const AddItem = ({ currentUser }) => {
   const [newItem, setNewItem] = useState({

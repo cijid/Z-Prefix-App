@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "../styles/App.css";
-const RENDER_API_URL = import.meta.env.API_URL;
+const RENDER_API_URL = import.meta.env.VITE_API_URL;
 
 function CrudApp({ currentUser }) {
   const [allItems, setAllItems] = useState([]);
