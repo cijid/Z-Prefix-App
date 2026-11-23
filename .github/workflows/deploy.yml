@@ -40,8 +40,8 @@ jobs:
 
       - run: npm ci
       - run: npm run build
-      - env:
-        VITE_API_URL: https://z-prefix-app-1.onrender.com
+        env:
+          VITE_API_URL: https://z-prefix-app-1.onrender.com
       # Runs a set of commands using the runners shell
       - uses: actions/upload-pages-artifact@v4
         with:
