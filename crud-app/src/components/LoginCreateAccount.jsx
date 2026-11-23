@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+const RENDER_API_URL = import.meta.env.API_URL;
 import "../styles/LoginCreateAccount.css";
 
 const LoginCreateAccount = ({ setCurrentUser }) => {
@@ -15,7 +15,7 @@ const LoginCreateAccount = ({ setCurrentUser }) => {
   const handleSubmit = async (submission) => {
     submission.preventDefault();
     if (userSelection === "Create Account") {
-      const response = await fetch("http://localhost:8080/user", {
+      const response = await fetch(`${RENDER_API_URL}/user`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -30,7 +30,7 @@ const LoginCreateAccount = ({ setCurrentUser }) => {
       setCurrentUser(createdUser);
       navigate("/");
     } else {
-      const response = await fetch("http://localhost:8080/login", {
+      const response = await fetch(`${RENDER_API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

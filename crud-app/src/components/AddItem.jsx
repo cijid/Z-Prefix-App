@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/AddItem.css";
+const RENDER_API_URL = import.meta.env.API_URL;
 
 const AddItem = ({ currentUser }) => {
   const [newItem, setNewItem] = useState({
@@ -15,7 +16,7 @@ const AddItem = ({ currentUser }) => {
   const createItem = (makeNewItem) => {
     makeNewItem.preventDefault();
 
-    fetch("http://localhost:8080/item", {
+    fetch(`${RENDER_API_URL}/item`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

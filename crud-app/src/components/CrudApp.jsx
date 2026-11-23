@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "../styles/App.css";
+const RENDER_API_URL = import.meta.env.API_URL;
 
 function CrudApp({ currentUser }) {
   const [allItems, setAllItems] = useState([]);
@@ -19,7 +20,7 @@ function CrudApp({ currentUser }) {
 
   // Fetch list of items from API
   useEffect(() => {
-    fetch("http://localhost:8080/item")
+    fetch(`${RENDER_API_URL}/item`)
       .then((res) => res.json())
       .then((data) => {
         setAllItems(data);
@@ -87,12 +88,9 @@ function CrudApp({ currentUser }) {
       return;
     }
 
-    const response = await fetch(
-      `http://localhost:8080/item/${selectedItem.id}`,
-      {
-        method: "DELETE",
-      },
-    );
+    const response = await fetch(`${RENDER_API_URL}/item/${selectedItem.id}`, {
+      method: "DELETE",
+    });
 
     if (!response.ok) {
       throw new Error("Could not delete item");
@@ -115,7 +113,7 @@ function CrudApp({ currentUser }) {
       quantity: Number(editItem.quantity),
     };
 
-    fetch(`http://localhost:8080/item/${selectedItem.id}`, {
+    fetch(`${RENDER_API_URL}/item/${selectedItem.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
