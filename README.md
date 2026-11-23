@@ -4,6 +4,9 @@ This is an inventory management application.
 
 ## Features
 
+Frontend hosted on Github
+Backend hosted on Render
+
 ### Inventory Managers
 
 1. Create accounts.
